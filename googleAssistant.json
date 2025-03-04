@@ -1,0 +1,50 @@
+const NodeHelper = require("node_helper");
+const record = require("node-record-lpcm16");
+const googleAuth = require("google-auth-library");
+const { Assistant, GoogleAuth } = require("google-assistant");
+
+module.exports = NodeHelper.create({
+  start: function () {
+    console.log("Starting Google Assistant module...");
+    this.setupVoiceRecognition();
+  },
+
+  setupVoiceRecognition: function () {
+    // Start the microphone recording
+    const mic = record.start({
+      threshold: 0,
+      recordProgram: "sox",  // Ensure 'sox' is installed
+      silence: 5000,
+    });
+
+    mic.on("data", (data) => {
+      console.log("Microphone input detected...");
+      this.detectVoiceCommand(data);
+    });
+  },
+
+  detectVoiceCommand: function (data) {
+    console.log("Processing voice command...");
+
+    // Initialize Google Assistant
+    const auth = new googleAuth.GoogleAuth({
+      clientId: "YOUR_CLIENT_ID",
+      clientSecret: "YOUR_CLIENT_SECRET",
+      redirectUri: "YOUR_REDIRECT_URI",
+    });
+
+    const assistant = new Assistant(auth);
+
+    assistant.on("ready", () => {
+      console.log("Google Assistant is ready!");
+      assistant.start();
+    });
+
+    assistant.on("response", (response) => {
+      console.log("Google Assistant responded:", response);
+    });
+
+    // Send audio data to the assistant for processing
+    assistant.processAudio(data);
+  },
+});

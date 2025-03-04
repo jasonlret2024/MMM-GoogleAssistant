@@ -1,0 +1,17 @@
+{
+  "name": "googleAssistant",
+  "version": "1.0.0",
+  "description": "MagicMirror Google Assistant Module",
+  "main": "googleAssistant.js",
+  "dependencies": {
+    "node-record-lpcm16": "^1.0.1",
+    "google-auth-library": "^7.10.1",
+    "google-assistant": "^2.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node googleAssistant.js"
+  },
+  "author": "",
+  "license": "MIT"
+}
